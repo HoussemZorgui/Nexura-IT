@@ -1,254 +1,370 @@
 'use client';
 
-import { getDb } from '@/lib/db';
-import { updateSettings, addBlog, deleteBlog, updateHero, addService, deleteService, updateProcessStep, updateReach } from '../actions';
-import UnicornWrapper from '@/components/UnicornWrapper';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useTransition, ReactNode } from 'react';
+import {
+    updateSettings, addBlog, deleteBlog, updateHero,
+    addService, deleteService, updateProcessStep, updateReach
+} from '../actions';
 
+// ─── Icons ────────────────────────────────────────────────────────────────────
+const Icon = ({ name }: { name: string }) => {
+    const icons: Record<string, ReactNode> = {
+        hero: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4"><path strokeLinecap="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" /></svg>,
+        services: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4"><path strokeLinecap="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>,
+        process: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4"><path strokeLinecap="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>,
+        reach: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4"><circle cx="12" cy="12" r="9" /><path strokeLinecap="round" d="M3.6 9h16.8M3.6 15h16.8M12 3a15.3 15.3 0 010 18M12 3a15.3 15.3 0 000 18" /></svg>,
+        blogs: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4"><path strokeLinecap="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>,
+        contact: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4"><path strokeLinecap="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>,
+        check: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-3.5 h-3.5"><path strokeLinecap="round" d="M5 13l4 4L19 7" /></svg>,
+        trash: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4"><path strokeLinecap="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>,
+        plus: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4"><path strokeLinecap="round" d="M12 5v14M5 12h14" /></svg>,
+        link: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4"><path strokeLinecap="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>,
+    };
+    return icons[name] ?? null;
+};
+
+// ─── Input Components ─────────────────────────────────────────────────────────
+const Field = ({ label, children }: { label: string; children: React.ReactNode }) => (
+    <div>
+        <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-[0.12em] mb-2">{label}</label>
+        {children}
+    </div>
+);
+
+const inputCls = "w-full bg-[#111113] border border-[#2a2a2e] rounded-xl px-4 py-3 text-[14px] text-white placeholder-gray-600 focus:outline-none focus:border-[#00d2ff]/60 focus:bg-[#111] transition-all duration-200";
+const textareaCls = `${inputCls} resize-none`;
+
+const SaveBtn = ({ label, pending }: { label: string; pending?: boolean }) => (
+    <button type="submit" disabled={pending}
+        className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-black text-[13px] font-semibold rounded-xl hover:bg-gray-100 active:scale-[0.98] transition-all disabled:opacity-50 shadow-sm">
+        {pending ? <span className="w-3.5 h-3.5 border-2 border-black/30 border-t-black rounded-full animate-spin" /> : <Icon name="check" />}
+        {label}
+    </button>
+);
+
+const SectionCard = ({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) => (
+    <div className="bg-[#0d0d0f] border border-[#1e1e22] rounded-2xl overflow-hidden">
+        <div className="px-7 py-5 border-b border-[#1e1e22] flex items-start justify-between">
+            <div>
+                <h3 className="text-[15px] font-semibold text-white">{title}</h3>
+                {subtitle && <p className="text-[13px] text-gray-500 mt-0.5">{subtitle}</p>}
+            </div>
+        </div>
+        <div className="px-7 py-6">{children}</div>
+    </div>
+);
+
+// ─── Main Component ────────────────────────────────────────────────────────────
 export default function AdminPage() {
     const [db, setDb] = useState<any>(null);
     const [activeTab, setActiveTab] = useState('hero');
+    const [pending, startTransition] = useTransition();
+    const [toast, setToast] = useState<string | null>(null);
 
-    useEffect(() => {
-        // En Next.js, on récupère les données via une action ou un fetch pour le client-side
-        // Mais ici pour simplifier et garder la structure du user, on va passer par les props ou un fetch
-        fetch('/api/db').then(res => res.json()).then(data => setDb(data));
-    }, []);
+    const refresh = () => fetch('/api/db').then(r => r.json()).then(setDb);
 
-    // Simulation de données pour le rendu immédiat si API pas encore prête
-    // Note: Idéalement on utiliserait un Server Component avec des Client Components enfants
-    // Pour corriger le design rapidement comme demandé :
+    useEffect(() => { refresh(); }, []);
 
-    const sections = [
-        { id: 'hero', label: 'Secteur Hero', icon: '✨' },
-        { id: 'services', label: 'Services', icon: '🛠️' },
-        { id: 'process', label: 'Méthodologie', icon: '📈' },
-        { id: 'reach', label: 'International', icon: '🌍' },
-        { id: 'blogs', label: 'Blog & Actu', icon: '📝' },
-        { id: 'contact', label: 'Coordonnées', icon: '📞' },
-    ];
+    const showToast = (msg: string) => {
+        setToast(msg);
+        setTimeout(() => setToast(null), 3000);
+    };
 
-    if (!db) return <div className="min-h-screen bg-black flex items-center justify-center text-white font-black text-4xl animate-pulse">NEXURA <span className="text-cyan-400">ADMIN</span></div>;
+    const wrap = (action: (f: FormData) => Promise<void>, label: string) => async (f: FormData) => {
+        startTransition(async () => { await action(f); await refresh(); showToast(label); });
+    };
+
+    const wrapBound = (action: Function, label: string) => async () => {
+        startTransition(async () => { await (action as any)(); await refresh(); showToast(label); });
+    };
+
+    if (!db) return (
+        <div className="min-h-screen bg-[#08080a] flex items-center justify-center">
+            <div className="flex flex-col items-center gap-4">
+                <div className="w-10 h-10 border-2 border-[#00d2ff]/20 border-t-[#00d2ff] rounded-full animate-spin" />
+                <p className="text-gray-500 text-sm font-medium tracking-wide">Chargement du tableau de bord…</p>
+            </div>
+        </div>
+    );
 
     const { settings, blogs, hero, services, process, reach } = db;
 
+    const nav = [
+        { id: 'hero', label: 'Hero Section', badge: null },
+        { id: 'services', label: 'Services', badge: services?.length },
+        { id: 'process', label: 'Méthodologie', badge: null },
+        { id: 'reach', label: 'Présence globale', badge: null },
+        { id: 'blogs', label: 'Blog & Actualités', badge: blogs?.length },
+        { id: 'contact', label: 'Informations', badge: null },
+    ];
+
+    const icons: Record<string, string> = {
+        hero: 'hero', services: 'services', process: 'process',
+        reach: 'reach', blogs: 'blogs', contact: 'contact',
+    };
+
     return (
-        <main className="relative min-h-screen bg-[#050505] overflow-hidden font-sans text-white">
-            {/* Background */}
-            <div className="fixed inset-0 w-full h-full -z-10 opacity-40">
-                <UnicornWrapper />
-            </div>
+        <div className="min-h-screen bg-[#08080a] text-white flex" style={{ fontFamily: "'Inter', sans-serif" }}>
 
-            <div className="flex min-h-screen">
+            {/* ── Toast ─────────────────────────────────────────────────── */}
+            {toast && (
+                <div className="fixed top-5 right-5 z-[999] bg-white text-black text-sm font-semibold px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-2.5 animate-fade-in">
+                    <span className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center text-white shrink-0"><Icon name="check" /></span>
+                    {toast}
+                </div>
+            )}
 
-                {/* SIDEBAR ULTRA-ORGANISEE */}
-                <aside className="w-80 border-r border-white/10 bg-black/60 backdrop-blur-2xl flex flex-col sticky top-0 h-screen z-50">
-                    <div className="p-8 border-b border-white/10 mb-6">
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="w-8 h-8 rounded-lg bg-cyan-500 flex items-center justify-center font-black text-sm">N</div>
-                            <h1 className="text-xl font-black tracking-tighter">NEXURA <span className="text-cyan-400">IT</span></h1>
+            {/* ── Sidebar ───────────────────────────────────────────────── */}
+            <aside className="w-[240px] shrink-0 flex flex-col border-r border-[#151518] bg-[#08080a] fixed top-0 left-0 h-full z-40">
+
+                {/* Brand */}
+                <div className="h-[60px] px-5 flex items-center border-b border-[#151518]">
+                    <div className="flex items-center gap-2.5">
+                        <div className="w-7 h-7 rounded-lg bg-[#00d2ff] flex items-center justify-center shrink-0">
+                            <span className="text-black text-xs font-black">N</span>
                         </div>
-                        <p className="text-[10px] text-gray-500 uppercase tracking-[0.2em] font-bold">Système de Gestion de Contenu</p>
-                    </div>
-
-                    <nav className="flex-1 px-4 space-y-2 overflow-y-auto">
-                        {sections.map((section) => (
-                            <button
-                                key={section.id}
-                                onClick={() => setActiveTab(section.id)}
-                                className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 group ${activeTab === section.id
-                                        ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/20 translate-x-1'
-                                        : 'text-gray-400 hover:bg-white/5 hover:text-white'
-                                    }`}
-                            >
-                                <span className="text-xl">{section.icon}</span>
-                                <span className="font-semibold text-sm tracking-wide">{section.label}</span>
-                                {activeTab === section.id && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>}
-                            </button>
-                        ))}
-                    </nav>
-
-                    <div className="p-6 mt-auto">
-                        <a href="/" className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-gray-400 font-bold text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all">
-                            <span>Visualiser le site</span>
-                            <span className="text-lg">↗</span>
-                        </a>
-                    </div>
-                </aside>
-
-                {/* ZONE DE CONTENU FLUIDE */}
-                <section className="flex-1 overflow-y-auto p-12 lg:p-20 custom-scrollbar">
-
-                    <div className="max-w-4xl mx-auto">
-                        {/* HEADER DE SECTION */}
-                        <div className="flex items-end justify-between mb-16 animate-fade-in">
-                            <div>
-                                <h2 className="text-5xl font-black tracking-tighter mb-4 capitalize">
-                                    Editer <span className="text-cyan-400">{activeTab}</span>
-                                </h2>
-                                <div className="h-1.5 w-24 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full"></div>
-                            </div>
-                            <div className="text-right">
-                                <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">Dernière mise à jour</p>
-                                <p className="text-white text-sm font-medium">Aujourd'hui, {new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</p>
-                            </div>
+                        <div>
+                            <p className="text-[13px] font-semibold text-white leading-none">Nexura IT</p>
+                            <p className="text-[10px] text-gray-500 mt-0.5">Admin CMS</p>
                         </div>
+                    </div>
+                </div>
 
-                        {/* FORMULAIRES DYNAMIQUES */}
-                        <div className="animate-fade-in delay-1">
-
-                            {/* HERO */}
-                            {activeTab === 'hero' && (
-                                <form action={updateHero} className="space-y-8">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        <div className="md:col-span-2 group">
-                                            <label className="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-3 ml-2 group-focus-within:text-cyan-400 transition-colors">Texte du Badge Animé</label>
-                                            <input type="text" name="pillText" defaultValue={hero.pillText} className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white focus:bg-white/[0.08] focus:border-cyan-400/50 outline-none transition-all shadow-inner" />
-                                        </div>
-                                        <div className="group">
-                                            <label className="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-3 ml-2 group-focus-within:text-cyan-400 transition-colors">Titre (Statique)</label>
-                                            <input type="text" name="titlePrefix" defaultValue={hero.titlePrefix} className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white focus:bg-white/[0.08] focus:border-cyan-400/50 outline-none transition-all shadow-inner" />
-                                        </div>
-                                        <div className="group">
-                                            <label className="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-3 ml-2 group-focus-within:text-cyan-400 transition-colors">Titre (Mot Brillant)</label>
-                                            <input type="text" name="titleHighlight" defaultValue={hero.titleHighlight} className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white focus:bg-white/[0.08] focus:border-cyan-400/50 outline-none transition-all shadow-inner" />
-                                        </div>
-                                        <div className="md:col-span-2 group">
-                                            <label className="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-3 ml-2 group-focus-within:text-cyan-400 transition-colors">Description Principale</label>
-                                            <textarea name="description" defaultValue={hero.description} className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white h-48 focus:bg-white/[0.08] focus:border-cyan-400/50 outline-none transition-all shadow-inner resize-none" />
-                                        </div>
-                                    </div>
-                                    <button type="submit" className="w-full py-6 rounded-2xl bg-cyan-600 text-white font-black text-sm uppercase tracking-widest hover:bg-cyan-500 transition-all shadow-xl shadow-cyan-900/40">
-                                        Sauvegarder les modifications du Hero
-                                    </button>
-                                </form>
+                {/* Nav */}
+                <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+                    <p className="text-[10px] font-semibold text-gray-600 uppercase tracking-[0.12em] px-3 mb-2">Contenu du site</p>
+                    {nav.map(item => (
+                        <button key={item.id} onClick={() => setActiveTab(item.id)}
+                            className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-left transition-all text-[13px] font-medium group ${activeTab === item.id
+                                ? 'bg-white/10 text-white'
+                                : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                }`}>
+                            <span className="flex items-center gap-3">
+                                <span className={activeTab === item.id ? 'text-[#00d2ff]' : 'text-gray-600 group-hover:text-gray-400'}>
+                                    <Icon name={icons[item.id]} />
+                                </span>
+                                {item.label}
+                            </span>
+                            {item.badge !== null && item.badge !== undefined && (
+                                <span className="text-[10px] bg-white/10 text-gray-400 px-1.5 py-0.5 rounded-md font-mono">{item.badge}</span>
                             )}
+                        </button>
+                    ))}
+                </nav>
 
-                            {/* SERVICES */}
-                            {activeTab === 'services' && (
-                                <div className="space-y-12">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Footer */}
+                <div className="px-3 py-4 border-t border-[#151518]">
+                    <a href="/" target="_blank"
+                        className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] text-gray-400 hover:text-white hover:bg-white/5 transition-all group">
+                        <span className="text-gray-600 group-hover:text-gray-300"><Icon name="link" /></span>
+                        Voir le site
+                    </a>
+                </div>
+            </aside>
+
+            {/* ── Main ──────────────────────────────────────────────────── */}
+            <main className="flex-1 ml-[240px] flex flex-col">
+
+                {/* Top bar */}
+                <header className="h-[60px] border-b border-[#151518] flex items-center justify-between px-8 sticky top-0 bg-[#08080a] z-30">
+                    <div>
+                        <h1 className="text-[15px] font-semibold text-white">{nav.find(n => n.id === activeTab)?.label}</h1>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        {pending && <span className="text-[12px] text-gray-500 flex items-center gap-1.5"><span className="w-3 h-3 border border-gray-600 border-t-white rounded-full animate-spin" />Enregistrement…</span>}
+                        <div className="w-7 h-7 rounded-full bg-[#00d2ff] flex items-center justify-center text-black text-[11px] font-black">N</div>
+                    </div>
+                </header>
+
+                {/* Page content */}
+                <div className="flex-1 overflow-y-auto px-8 py-8">
+                    <div className="max-w-[860px] mx-auto space-y-6">
+
+                        {/* ── HERO ──────────────────────────────────── */}
+                        {activeTab === 'hero' && (
+                            <SectionCard title="Configuration du Hero" subtitle="Modifiez le texte principal de la page d'accueil">
+                                <form action={updateHero as any} className="space-y-5">
+                                    <Field label="Badge animé (petit texte en haut)">
+                                        <input type="text" name="pillText" defaultValue={hero.pillText} className={inputCls} placeholder="Ex: IT Services & Solutions" />
+                                    </Field>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <Field label="Titre — Partie fixe">
+                                            <input type="text" name="titlePrefix" defaultValue={hero.titlePrefix} className={inputCls} placeholder="Ex: Shape the" />
+                                        </Field>
+                                        <Field label="Titre — Mot en couleur">
+                                            <input type="text" name="titleHighlight" defaultValue={hero.titleHighlight} className={inputCls} placeholder="Ex: Future." />
+                                        </Field>
+                                    </div>
+                                    <Field label="Description principale">
+                                        <textarea name="description" defaultValue={hero.description} className={`${textareaCls} h-32`} placeholder="Votre accroche principale…" />
+                                    </Field>
+                                    <div className="flex justify-end pt-2">
+                                        <SaveBtn label="Sauvegarder le Hero" pending={pending} />
+                                    </div>
+                                </form>
+                            </SectionCard>
+                        )}
+
+                        {/* ── SERVICES ──────────────────────────────── */}
+                        {activeTab === 'services' && (<>
+                            <SectionCard title="Services actuels" subtitle={`${services?.length ?? 0} service(s) affiché(s) sur le site`}>
+                                {services?.length === 0
+                                    ? <p className="text-gray-600 text-sm py-4 text-center">Aucun service. Ajoutez-en un ci-dessous.</p>
+                                    : <div className="divide-y divide-[#1e1e22]">
                                         {services.map((s: any) => (
-                                            <div key={s.id} className="p-6 bg-white/5 border border-white/10 rounded-[1.5rem] flex items-center justify-between group hover:border-cyan-500/30 transition-all">
+                                            <div key={s.id} className="flex items-center justify-between py-4 first:pt-0 last:pb-0 group">
                                                 <div className="flex items-center gap-4">
-                                                    <span className="text-3xl filter drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">{s.icon}</span>
-                                                    <span className="font-bold text-lg">{s.title}</span>
+                                                    <span className="text-2xl w-10 h-10 bg-[#1a1a1e] rounded-xl flex items-center justify-center shrink-0">{s.icon}</span>
+                                                    <div>
+                                                        <p className="text-[14px] font-medium text-white">{s.title}</p>
+                                                        <p className="text-[12px] text-gray-500 mt-0.5 line-clamp-1 max-w-[400px]">{s.description}</p>
+                                                    </div>
                                                 </div>
-                                                <form action={deleteService.bind(null, s.id)}>
-                                                    <button className="w-10 h-10 rounded-full flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 italic font-bold">×</button>
+                                                <form action={deleteService.bind(null, s.id) as any}>
+                                                    <button type="submit" className="opacity-0 group-hover:opacity-100 transition-opacity w-8 h-8 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white flex items-center justify-center">
+                                                        <Icon name="trash" />
+                                                    </button>
                                                 </form>
                                             </div>
                                         ))}
                                     </div>
+                                }
+                            </SectionCard>
 
-                                    <div className="bg-white/5 border border-white/10 rounded-[2rem] p-10">
-                                        <h3 className="text-xl font-bold mb-8">Nouveau Service</h3>
-                                        <form action={addService} className="space-y-6">
-                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                                <input type="text" name="icon" placeholder="Emoji Icon" className="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-white outline-none" />
-                                                <input type="text" name="title" placeholder="Titre du service" className="md:col-span-2 w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-white outline-none" />
-                                            </div>
-                                            <textarea name="description" placeholder="Description courte..." className="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-white h-32 outline-none resize-none" />
-                                            <button type="submit" className="w-full py-5 rounded-2xl bg-white text-black font-black uppercase tracking-widest text-xs hover:bg-cyan-400 hover:text-white transition-all">Ajouter le service au catalogue</button>
-                                        </form>
+                            <SectionCard title="Ajouter un service" subtitle="Ce service apparaîtra immédiatement sur le site.">
+                                <form action={addService as any} className="space-y-5">
+                                    <div className="grid grid-cols-[80px_1fr] gap-4">
+                                        <Field label="Icône">
+                                            <input type="text" name="icon" className={inputCls} placeholder="☁️" />
+                                        </Field>
+                                        <Field label="Titre du service">
+                                            <input type="text" name="title" className={inputCls} placeholder="Cloud Architecture" />
+                                        </Field>
                                     </div>
-                                </div>
-                            )}
-
-                            {/* PROCESS */}
-                            {activeTab === 'process' && (
-                                <div className="space-y-8">
-                                    {process.map((p: any, idx: number) => (
-                                        <form key={p.id} action={updateProcessStep.bind(null, idx)} className="bg-white/5 border border-white/10 p-10 rounded-[2rem] flex flex-col md:flex-row gap-8 group hover:bg-white/[0.08] transition-all">
-                                            <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-cyan-400 to-blue-600 flex-shrink-0 flex items-center justify-center text-4xl font-black text-white shadow-xl shadow-cyan-500/20">{p.step}</div>
-                                            <div className="flex-1 space-y-4">
-                                                <input type="text" name="title" defaultValue={p.title} className="text-2xl font-black bg-transparent border-b border-white/10 w-full outline-none focus:border-cyan-400 pb-2" />
-                                                <textarea name="description" defaultValue={p.description} className="w-full bg-transparent border border-white/5 rounded-xl p-4 text-gray-400 font-light leading-relaxed h-28 outline-none focus:bg-black/20" />
-                                                <button type="submit" className="px-8 py-3 rounded-full bg-white/5 border border-white/20 text-cyan-400 text-xs font-bold uppercase tracking-widest hover:bg-cyan-500 hover:text-white transition-all">Mettre à jour l'étape</button>
-                                            </div>
-                                        </form>
-                                    ))}
-                                </div>
-                            )}
-
-                            {/* REACH */}
-                            {activeTab === 'reach' && (
-                                <form action={updateReach} className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] space-y-10">
-                                    <div className="grid grid-cols-1 gap-8">
-                                        <div className="group">
-                                            <label className="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-3 italic">Petit titre de section</label>
-                                            <input type="text" name="pill" defaultValue={reach.pill} className="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-white outline-none" />
-                                        </div>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                            <div>
-                                                <label className="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-3 italic">Titre Principal</label>
-                                                <input type="text" name="title" defaultValue={reach.title} className="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-white outline-none" />
-                                            </div>
-                                            <div>
-                                                <label className="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-3 italic">Sous-titre (Fin de phrase)</label>
-                                                <input type="text" name="subtitle" defaultValue={reach.subtitle} className="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-white outline-none font-bold" />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label className="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-3 italic">Description détaillée</label>
-                                            <textarea name="description" defaultValue={reach.description} className="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-white h-40 outline-none resize-none" />
-                                        </div>
+                                    <Field label="Description">
+                                        <textarea name="description" className={`${textareaCls} h-24`} placeholder="Décrivez brièvement ce service…" />
+                                    </Field>
+                                    <div className="flex justify-end">
+                                        <button type="submit" className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#1a1a1e] border border-[#2a2a2e] text-white text-[13px] font-semibold rounded-xl hover:bg-[#222226] transition-all">
+                                            <Icon name="plus" /> Ajouter le service
+                                        </button>
                                     </div>
-                                    <button type="submit" className="w-full py-6 rounded-2xl bg-indigo-600 text-white font-black uppercase tracking-[0.2em] text-xs hover:bg-indigo-500 shadow-xl shadow-indigo-900/40 transition-all">Propulser les données internationales</button>
                                 </form>
-                            )}
+                            </SectionCard>
+                        </>)}
 
-                            {/* BLOGS */}
-                            {activeTab === 'blogs' && (
-                                <div className="space-y-12">
-                                    <form action={addBlog} className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] space-y-6">
-                                        <h3 className="text-2xl font-black mb-6">Éditer un nouvel article</h3>
-                                        <input type="text" name="title" placeholder="Titre percutant" className="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-white outline-none" />
-                                        <input type="text" name="excerpt" placeholder="Accroche (résumé)" className="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-white outline-none" />
-                                        <textarea name="content" placeholder="Corps de l'article..." className="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-white h-64 outline-none" />
-                                        <button type="submit" className="w-full py-5 rounded-2xl bg-white text-black font-black uppercase tracking-widest text-xs hover:bg-cyan-500 hover:text-white transition-all">Diffuser sur le réseau</button>
-                                    </form>
+                        {/* ── PROCESS ───────────────────────────────── */}
+                        {activeTab === 'process' && (
+                            <div className="space-y-4">
+                                {process?.map((p: any, idx: number) => (
+                                    <SectionCard key={p.id} title={`Étape ${p.step}`} subtitle={p.title}>
+                                        <form action={updateProcessStep.bind(null, idx) as any} className="space-y-5">
+                                            <Field label="Titre de l'étape">
+                                                <input type="text" name="title" defaultValue={p.title} className={inputCls} />
+                                            </Field>
+                                            <Field label="Description">
+                                                <textarea name="description" defaultValue={p.description} className={`${textareaCls} h-28`} />
+                                            </Field>
+                                            <div className="flex justify-end">
+                                                <SaveBtn label={`Mettre à jour Étape ${p.step}`} pending={pending} />
+                                            </div>
+                                        </form>
+                                    </SectionCard>
+                                ))}
+                            </div>
+                        )}
 
-                                    <div className="grid grid-cols-1 gap-4">
+                        {/* ── REACH ─────────────────────────────────── */}
+                        {activeTab === 'reach' && (
+                            <SectionCard title="Présence internationale" subtitle="Section 'Globe' de la page d'accueil">
+                                <form action={updateReach as any} className="space-y-5">
+                                    <Field label="Sous-titre de section (badge)">
+                                        <input type="text" name="pill" defaultValue={reach.pill} className={inputCls} />
+                                    </Field>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <Field label="Titre principal">
+                                            <input type="text" name="title" defaultValue={reach.title} className={inputCls} />
+                                        </Field>
+                                        <Field label="Complément en gras">
+                                            <input type="text" name="subtitle" defaultValue={reach.subtitle} className={inputCls} />
+                                        </Field>
+                                    </div>
+                                    <Field label="Paragraphe descriptif">
+                                        <textarea name="description" defaultValue={reach.description} className={`${textareaCls} h-32`} />
+                                    </Field>
+                                    <div className="flex justify-end">
+                                        <SaveBtn label="Mettre à jour" pending={pending} />
+                                    </div>
+                                </form>
+                            </SectionCard>
+                        )}
+
+                        {/* ── BLOGS ─────────────────────────────────── */}
+                        {activeTab === 'blogs' && (<>
+                            <SectionCard title="Rédiger un article" subtitle="L'article est publié immédiatement sur le site.">
+                                <form action={addBlog as any} className="space-y-5">
+                                    <Field label="Titre de l'article">
+                                        <input type="text" name="title" className={inputCls} placeholder="Mon article…" />
+                                    </Field>
+                                    <Field label="Résumé (accroche)">
+                                        <input type="text" name="excerpt" className={inputCls} placeholder="En quelques mots…" />
+                                    </Field>
+                                    <Field label="Contenu complet">
+                                        <textarea name="content" className={`${textareaCls} h-48`} placeholder="Développez votre article ici…" />
+                                    </Field>
+                                    <div className="flex justify-end">
+                                        <SaveBtn label="Publier l'article" pending={pending} />
+                                    </div>
+                                </form>
+                            </SectionCard>
+
+                            <SectionCard title="Articles publiés" subtitle={`${blogs?.length ?? 0} article(s)`}>
+                                {blogs?.length === 0
+                                    ? <p className="text-gray-600 text-sm py-4 text-center">Aucun article publié pour l'instant.</p>
+                                    : <div className="divide-y divide-[#1e1e22]">
                                         {blogs.map((b: any) => (
-                                            <div key={b.id} className="p-8 bg-white/5 border border-white/10 rounded-3xl flex justify-between items-center group hover:bg-white/[0.08] transition-all">
+                                            <div key={b.id} className="flex items-center justify-between py-4 first:pt-0 last:pb-0 group">
                                                 <div>
-                                                    <h4 className="text-xl font-bold mb-1">{b.title}</h4>
-                                                    <p className="text-cyan-500 text-[10px] font-black uppercase tracking-[0.3em]">{b.date}</p>
+                                                    <p className="text-[14px] font-medium text-white">{b.title}</p>
+                                                    <p className="text-[12px] text-gray-500 mt-0.5">{b.date} — {b.excerpt || b.content.slice(0, 60) + '…'}</p>
                                                 </div>
-                                                <form action={deleteBlog.bind(null, b.id)}>
-                                                    <button className="px-6 py-2 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 text-xs font-bold uppercase hover:bg-red-500 hover:text-white transition-all">Effacer</button>
+                                                <form action={deleteBlog.bind(null, b.id) as any}>
+                                                    <button type="submit" className="opacity-0 group-hover:opacity-100 transition-opacity w-8 h-8 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white flex items-center justify-center">
+                                                        <Icon name="trash" />
+                                                    </button>
                                                 </form>
                                             </div>
                                         ))}
                                     </div>
-                                </div>
-                            )}
+                                }
+                            </SectionCard>
+                        </>)}
 
-                            {/* CONTACT */}
-                            {activeTab === 'contact' && (
-                                <form action={updateSettings} className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] space-y-10">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        <div>
-                                            <label className="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-3">Téléphone Direct</label>
-                                            <input type="text" name="telephone" defaultValue={settings.telephone} className="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-white outline-none font-black text-xl tracking-tighter" />
-                                        </div>
-                                        <div>
-                                            <label className="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-3">Email Support/Sales</label>
-                                            <input type="email" name="email" defaultValue={settings.email} className="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-white outline-none" />
-                                        </div>
-                                        <div className="md:col-span-2">
-                                            <label className="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-3">Siège Social / Adresse</label>
-                                            <input type="text" name="address" defaultValue={settings.address} className="w-full bg-black/40 border border-white/10 rounded-2xl p-5 text-white outline-none" />
-                                        </div>
+                        {/* ── CONTACT ───────────────────────────────── */}
+                        {activeTab === 'contact' && (
+                            <SectionCard title="Informations de contact" subtitle="Affiché dans le footer du site">
+                                <form action={updateSettings as any} className="space-y-5">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <Field label="Téléphone">
+                                            <input type="tel" name="telephone" defaultValue={settings.telephone} className={inputCls} placeholder="+33 1 23 45 67 89" />
+                                        </Field>
+                                        <Field label="Adresse email">
+                                            <input type="email" name="email" defaultValue={settings.email} className={inputCls} placeholder="contact@nexura.it" />
+                                        </Field>
                                     </div>
-                                    <button type="submit" className="w-full py-6 rounded-2xl bg-cyan-600 text-white font-black uppercase tracking-[0.2em] text-xs hover:bg-cyan-500 transition-all">Finaliser les coordonnées</button>
+                                    <Field label="Adresse postale">
+                                        <input type="text" name="address" defaultValue={settings.address} className={inputCls} placeholder="123 Avenue…" />
+                                    </Field>
+                                    <div className="flex justify-end pt-2">
+                                        <SaveBtn label="Enregistrer" pending={pending} />
+                                    </div>
                                 </form>
-                            )}
-                        </div>
+                            </SectionCard>
+                        )}
+
                     </div>
-                </section>
-            </div>
-        </main>
+                </div>
+            </main>
+        </div>
     );
 }
