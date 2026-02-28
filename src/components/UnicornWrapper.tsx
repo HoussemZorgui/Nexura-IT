@@ -34,32 +34,57 @@ export default function UnicornWrapper() {
             initUnicorn();
         }
 
-        // 2. Aggressive polling to remove the Watermark Anchor Tag
-        const hideBadge = () => {
-            const links = document.querySelectorAll('a');
-            links.forEach(link => {
-                // Check if the link points to unicorn.studio
-                if (link.href && link.href.includes('unicorn.studio')) {
-                    link.style.display = 'none';
-                    link.style.opacity = '0';
-                    link.style.visibility = 'hidden';
-                    link.style.pointerEvents = 'none';
+        // 2. Ultimate Aggressive Watermark Obliteration
+        const obliterateWatermark = () => {
+            try {
+                // Method A: Nuke by direct query selector
+                document.querySelectorAll('a[href*="unicorn.studio"]').forEach(el => el.remove());
+
+                // Method B: Nuke by traversing all text nodes in the DOM
+                const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+                let node;
+                while ((node = walker.nextNode())) {
+                    if (node.nodeValue && node.nodeValue.toLowerCase().includes('unicorn.studio')) {
+                        if (node.parentElement && node.parentElement.tagName !== 'SCRIPT' && node.parentElement.tagName !== 'STYLE') {
+                            node.parentElement.style.setProperty('display', 'none', 'important');
+                            node.parentElement.style.setProperty('opacity', '0', 'important');
+                            node.parentElement.style.setProperty('visibility', 'hidden', 'important');
+                        }
+                    }
                 }
-            });
+
+                // Method C: Nuke inside any Shadow DOMs (if the library uses Web Components)
+                document.querySelectorAll('*').forEach((el: any) => {
+                    if (el.shadowRoot) {
+                        el.shadowRoot.querySelectorAll('a').forEach((link: HTMLAnchorElement) => {
+                            if (link.href && link.href.includes('unicorn.studio')) {
+                                link.remove();
+                            }
+                        });
+                    }
+                });
+            } catch (e) {
+                // Silent catch to prevent visual errors during rapid execution
+            }
         };
 
-        // Run multiple times as the badge may be injected dynamically a few seconds after render
+        // Run aggressively in the first few seconds
         const intervals = [
-            setInterval(hideBadge, 100),
-            setInterval(hideBadge, 500),
-            setInterval(hideBadge, 1000),
-            setInterval(hideBadge, 3000),
-            setInterval(hideBadge, 5000),
+            setInterval(obliterateWatermark, 10), // Ultra-fast (every 10ms)
+            setInterval(obliterateWatermark, 100),
+            setInterval(obliterateWatermark, 1000)
         ];
 
-        // Cleanup intervals after 10 seconds tracking
+        // And watch the DOM continuously to catch it exactly when the script injects it
+        const observer = new MutationObserver(() => {
+            obliterateWatermark();
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+
         return () => {
             intervals.forEach(clearInterval);
+            observer.disconnect();
         };
 
     }, []);
