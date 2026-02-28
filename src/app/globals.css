@@ -3,15 +3,17 @@
 :root {
   --primary-color: #00d2ff;
   --secondary-color: #3a7bd5;
-  --bg-color: #0a0a0a;
+  --bg-color: #050505;
   --surface-color: rgba(255, 255, 255, 0.05);
   --text-primary: #ffffff;
-  --text-secondary: #a0a0a0;
+  --text-secondary: #cbd5e1;
+  /* Slightly brighter for better reading */
   --accent-color: #00f2fe;
   --border-color: rgba(255, 255, 255, 0.1);
-  --glass-bg: rgba(20, 20, 20, 0.4);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.1);
-  --font-primary: 'Inter', sans-serif;
+  --glass-bg: rgba(10, 10, 10, 0.7);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+  --font-header: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
 }
 
 * {
@@ -23,7 +25,7 @@
 body {
   background-color: var(--bg-color);
   color: var(--text-primary);
-  font-family: var(--font-primary);
+  font-family: var(--font-body);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -34,27 +36,35 @@ a {
   text-decoration: none;
 }
 
-/* Typography */
+/* Typography Improvements */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-weight: 700;
-  line-height: 1.2;
+  font-family: var(--font-header);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  /* Tight letter spacing for luxury feel */
 }
 
 h1 {
-  font-size: 3.5rem;
+  font-size: 5rem;
 }
 
 h2 {
-  font-size: 2.5rem;
+  font-size: 3.5rem;
 }
 
 h3 {
-  font-size: 1.75rem;
+  font-size: 2rem;
+}
+
+p {
+  color: var(--text-secondary);
+  font-weight: 400;
 }
 
 /* Utilities */
