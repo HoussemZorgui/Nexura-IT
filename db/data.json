@@ -32,26 +32,107 @@
   ],
   "metrics": [
     {
-      "title": "99.9%",
-      "desc": "Fiabilité Absolue",
-      "glow": "shadow-[0_0_30px_rgba(0,210,255,0.15)]"
+      "id": "m1",
+      "value": "99.9%",
+      "label": "Uptime Garanti"
     },
     {
-      "title": "24/7",
-      "desc": "Support Premium",
-      "glow": ""
+      "id": "m2",
+      "value": "24/7",
+      "label": "Support Premium"
     },
     {
-      "title": "+150",
-      "desc": "Projets Déployés",
-      "glow": ""
+      "id": "m3",
+      "value": "+150",
+      "label": "Projets Déployés"
     },
     {
-      "title": "Zero",
-      "desc": "Failles de Sécurité",
-      "glow": "shadow-[0_0_30px_rgba(99,102,241,0.15)]"
+      "id": "m4",
+      "value": "0",
+      "label": "Failles de Sécurité"
     }
   ],
+  "techStack": [
+    {
+      "id": "t1",
+      "name": "React"
+    },
+    {
+      "id": "t2",
+      "name": "Next.js 15"
+    },
+    {
+      "id": "t3",
+      "name": "Node.js"
+    },
+    {
+      "id": "t4",
+      "name": "Python"
+    },
+    {
+      "id": "t5",
+      "name": "Go"
+    },
+    {
+      "id": "t6",
+      "name": "AWS"
+    },
+    {
+      "id": "t7",
+      "name": "Azure"
+    },
+    {
+      "id": "t8",
+      "name": "Docker"
+    },
+    {
+      "id": "t9",
+      "name": "Kubernetes"
+    },
+    {
+      "id": "t10",
+      "name": "TypeScript"
+    },
+    {
+      "id": "t11",
+      "name": "GraphQL"
+    },
+    {
+      "id": "t12",
+      "name": "Cyber Defense OS"
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "te1",
+      "name": "Alexandre Dupont",
+      "role": "CTO, FinTech Global",
+      "avatar": "AD",
+      "text": "Nexura IT a transformé notre infrastructure en 6 semaines. Zéro downtime, performances décuplées. Un partenaire d'élite."
+    },
+    {
+      "id": "te2",
+      "name": "Sophie Martin",
+      "role": "Directrice IT, MedGroup SA",
+      "avatar": "SM",
+      "text": "L'audit cybersécurité réalisé par Nexura a révélé des failles critiques et surtout les solutions pour les corriger. Irréprochable."
+    },
+    {
+      "id": "te3",
+      "name": "Karim Benaissa",
+      "role": "CEO, StartupLab",
+      "avatar": "KB",
+      "text": "Notre MVP a été livré en 3 semaines avec une qualité de code digne des GAFAM. L'équipe Nexura est exceptionnelle."
+    }
+  ],
+  "cta": {
+    "badge": "Prêt à commencer ?",
+    "title": "Construisons votre futur",
+    "highlight": "ensemble.",
+    "description": "Contactez nos experts pour un audit gratuit de votre infrastructure et une roadmap technologique personnalisée.",
+    "buttonPrimary": "Démarrer un projet",
+    "buttonSecondary": "Planifier un appel"
+  },
   "process": [
     {
       "id": "p1",
