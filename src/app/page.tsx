@@ -152,29 +152,29 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative z-10">
             {/* Step 1 */}
-            <div className="group relative bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-3xl hover:bg-white/10 transition-colors duration-500">
-              <div className="absolute -top-6 -left-6 w-16 h-16 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-2xl font-black text-white shadow-xl shadow-cyan-500/30 group-hover:scale-110 transition-transform">01</div>
-              <h3 className="text-2xl font-semibold text-white mt-4 mb-4">Audit & Stratégie</h3>
+            <div className="group bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-[2.5rem] hover:bg-white/10 transition-all duration-500 hover:border-cyan-500/30">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-2xl font-black text-white shadow-lg shadow-cyan-500/20 mb-8 group-hover:scale-110 transition-transform">01</div>
+              <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">Audit & Stratégie</h3>
               <p className="text-gray-400 font-light leading-relaxed">
                 Analyse profonde de votre infrastructure existante. Nous identifions les frictions et concevons une architecture cible évolutive et sécurisée.
               </p>
             </div>
 
             {/* Step 2 */}
-            <div className="group relative bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-3xl hover:bg-white/10 transition-colors duration-500 mt-0 md:mt-12">
-              <div className="absolute -top-6 -left-6 w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-2xl font-black text-white shadow-xl shadow-blue-500/30 group-hover:scale-110 transition-transform">02</div>
-              <h3 className="text-2xl font-semibold text-white mt-4 mb-4">Engineering Core</h3>
+            <div className="group bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-[2.5rem] hover:bg-white/10 transition-all duration-500 hover:border-blue-500/30">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-2xl font-black text-white shadow-lg shadow-blue-500/20 mb-8 group-hover:scale-110 transition-transform">02</div>
+              <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">Engineering Core</h3>
               <p className="text-gray-400 font-light leading-relaxed">
                 Déploiement furtif par nos experts (DevOps, SecOps, Dev). Code clean, tests automatisés algorithmiques et intégration continue.
               </p>
             </div>
 
             {/* Step 3 */}
-            <div className="group relative bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-3xl hover:bg-white/10 transition-colors duration-500 mt-0 md:mt-24">
-              <div className="absolute -top-6 -left-6 w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl font-black text-white shadow-xl shadow-indigo-500/30 group-hover:scale-110 transition-transform">03</div>
-              <h3 className="text-2xl font-semibold text-white mt-4 mb-4">Scale & Monitoring</h3>
+            <div className="group bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-[2.5rem] hover:bg-white/10 transition-all duration-500 hover:border-indigo-500/30">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl font-black text-white shadow-lg shadow-indigo-500/20 mb-8 group-hover:scale-110 transition-transform">03</div>
+              <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">Scale & Monitoring</h3>
               <p className="text-gray-400 font-light leading-relaxed">
                 Lancement sur serveurs haute-disponibilité. Vos systèmes sont monitorés 24/7 par nos IAs pour anticiper les baisses de charge.
               </p>
