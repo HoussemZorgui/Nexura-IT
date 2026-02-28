@@ -72,6 +72,16 @@ h3 {
   background-clip: text;
 }
 
+/* Hide the Unicorn Studio watermark */
+a[href*="unicorn.studio"],
+[class*="unicorn-watermark"],
+[id*="us-badge"] {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
 /* Glassmorphism Classes */
 .glass-panel {
   background: var(--glass-bg);
