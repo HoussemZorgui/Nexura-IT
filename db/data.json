@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "telephone": "+33 1 23 45 67 89",
+    "address": "123 Avenue des Champs-Élysées, 75008 Paris",
+    "email": "contact@nexura.it"
+  },
+  "blogs": [
+    {
+      "id": "1",
+      "title": "Welcome to the Future of IT",
+      "excerpt": "Discover how Nexura IT is transforming businesses with scalable solutions and cutting-edge technology.",
+      "content": "Nexura IT is a premium IT services provider helping enterprises scale their infrastructure. Our core specialities include modern web apps, cloud migrations, and robust security auditing.",
+      "date": "2026-02-28"
+    }
+  ]
+}
