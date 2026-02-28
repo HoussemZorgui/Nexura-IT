@@ -20,36 +20,37 @@ export default function Home() {
 
           <div className="container px-4 text-center flex flex-col items-center justify-center relative z-10 w-full">
 
-            <div className="relative pointer-events-auto transform animate-fade-in group w-full max-w-4xl mx-auto mt-4 md:mt-10">
-              {/* Subtle ambient glow behind the card */}
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-cyan-500/10 blur-3xl opacity-50 group-hover:opacity-100 transition-opacity duration-700"></div>
+            <div className="relative pointer-events-auto transform animate-fade-in group w-full max-w-5xl mx-auto mt-10 md:mt-20 flex flex-col items-center">
 
-              {/* The elegant glass card */}
-              <div className="relative bg-black/40 backdrop-blur-3xl px-8 py-16 md:px-16 md:py-20 rounded-[3rem] border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.6),_inset_0_1px_rgba(255,255,255,0.2)]">
+              {/* Ultra-sleek Pill */}
+              <div className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-gray-200 text-xs md:text-sm font-semibold tracking-[0.3em] uppercase mb-10 shadow-[0_0_30px_rgba(0,210,255,0.15)] hover:border-cyan-400/50 transition-colors cursor-default">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500 shadow-[0_0_10px_#00d2ff]"></span>
+                </span>
+                IT Services & Solutions
+              </div>
 
-                <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-white/10 bg-black/50 backdrop-blur-md text-gray-300 text-xs font-semibold tracking-[0.2em] uppercase mb-8 shadow-inner shadow-white/5">
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#00d2ff]"></span>
-                  IT Services & Solutions
-                </div>
+              {/* Massive Typography floating on the beam */}
+              <h1 className="text-6xl md:text-8xl lg:text-[7.5rem] font-black mb-8 tracking-tighter leading-none text-white drop-shadow-2xl">
+                Shape the <span className="text-transparent bg-clip-text bg-gradient-to-br from-cyan-300 via-blue-500 to-indigo-600">Future.</span>
+              </h1>
 
-                <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tighter leading-tight text-white" style={{ textShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
-                  Shape the <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-500">Future</span>.
-                </h1>
+              {/* Refined Description */}
+              <p className="text-xl md:text-2xl text-gray-300/90 max-w-3xl mx-auto mb-14 font-light tracking-wide leading-relaxed drop-shadow-lg mix-blend-screen">
+                Propulsez votre entreprise vers l'avant avec des infrastructures Cloud ultra-performantes, des audits de cybersécurité implacables et du développement sur-mesure premium.
+              </p>
 
-                <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-12 font-light tracking-wide leading-relaxed" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.6)' }}>
-                  Propulsez votre entreprise vers l'avant avec des infrastructures Cloud ultra-performantes, des audits de cybersécurité implacables et du développement sur-mesure premium.
-                </p>
+              {/* Minimalist Premium Buttons */}
+              <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
+                <a href="#services" className="relative group/btn px-10 py-5 overflow-hidden rounded-full bg-white text-black font-bold text-sm uppercase tracking-[0.2em] transition-all hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.15)]">
+                  <span className="relative z-10 transition-colors group-hover/btn:text-white">Notre Expertise</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 scale-[3] translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-out z-0"></div>
+                </a>
 
-                <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-                  <a href="#services" className="relative group/btn px-8 py-4 overflow-hidden rounded-full bg-white text-black font-semibold text-sm uppercase tracking-widest transition-all hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
-                    <span className="relative z-10 transition-colors group-hover/btn:text-white">Notre Expertise</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-600 scale-[3] translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-out z-0"></div>
-                  </a>
-
-                  <a href="#contact" className="px-8 py-4 rounded-full border border-white/20 text-white font-medium text-sm tracking-widest uppercase hover:bg-white hover:text-black backdrop-blur-sm transition-all duration-300">
-                    Nous Contacter
-                  </a>
-                </div>
+                <a href="#contact" className="group px-10 py-5 rounded-full border border-white/20 text-white font-semibold text-sm tracking-[0.2em] uppercase hover:border-cyan-400 hover:text-cyan-400 backdrop-blur-sm transition-all duration-300">
+                  Nous Contacter <span className="inline-block transition-transform group-hover:translate-x-2 ml-2">→</span>
+                </a>
               </div>
             </div>
 
