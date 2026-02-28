@@ -6,6 +6,7 @@ import {
     addService, deleteService,
     addMetric, deleteMetric,
     addTech, deleteTech,
+    addClient, deleteClient,
     addTestimonial, deleteTestimonial,
     updateCta,
     updateProcessStep,
@@ -138,6 +139,7 @@ const NAV = [
     { id: 'tech', label: 'Technologies', icon: Ico.tech, key: 'techStack' },
     { id: 'process', label: 'Méthodologie', icon: Ico.process, key: null },
     { id: 'reach', label: 'Présence globale', icon: Ico.reach, key: null },
+    { id: 'clients', label: 'Clients & Logos', icon: Ico.testi, key: 'clients' },
     { id: 'testi', label: 'Témoignages', icon: Ico.testi, key: 'testimonials' },
     { id: 'cta', label: 'Appel à l\'action', icon: Ico.cta, key: null },
     { id: 'blogs', label: 'Blog', icon: Ico.blogs, key: 'blogs' },
@@ -169,7 +171,7 @@ export default function AdminPage() {
         </div>
     );
 
-    const { settings, blogs, hero, services, metrics, techStack, testimonials, cta, process, reach } = db;
+    const { settings, blogs, hero, services, metrics, techStack, clients, testimonials, cta, process, reach } = db;
 
     return (
         <div style={{ minHeight: '100vh', background: BG, display: 'flex', fontFamily: 'Inter, sans-serif' }}>
@@ -389,7 +391,49 @@ export default function AdminPage() {
                             </Card>
                         )}
 
+                        {/* ─── CLIENTS & LOGOS ──────────── */}
+                        {tab === 'clients' && (<>
+                            <Card title="Logos Clients Affichés" subtitle={`${clients?.length ?? 0} logo(s) visible(s) dans le bandeau`}>
+                                {!clients?.length
+                                    ? <p style={{ color: '#555570', textAlign: 'center', padding: '32px 0', fontSize: 14 }}>Aucun client pour l'instant.</p>
+                                    : <div>{clients.map((c: any, i: number) => (
+                                        <div key={c.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0', borderBottom: i < clients.length - 1 ? `1px solid ${BORDER}` : 'none', gap: 16 }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                                                <div style={{ width: 48, height: 48, background: '#0d0d14', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 800, color: ACCENT, fontFamily: 'Outfit, sans-serif', flexShrink: 0 }}>
+                                                    {c.name.slice(0, 2).toUpperCase()}
+                                                </div>
+                                                <div>
+                                                    <p style={{ fontSize: 15, fontWeight: 600, color: '#fff', margin: 0 }}>{c.name}</p>
+                                                    <p style={{ fontSize: 11, color: '#555570', margin: '3px 0 0', textTransform: 'uppercase', letterSpacing: '.08em' }}>{c.industry} · <span style={{ color: '#333355' }}>logoType: {c.logoType}</span></p>
+                                                </div>
+                                            </div>
+                                            <form action={runVoid(deleteClient.bind(null, c.id), 'Client supprimé')}><TrashBtn pending={pend} /></form>
+                                        </div>
+                                    ))}</div>
+                                }
+                            </Card>
+                            <Card title="Ajouter un client" subtitle="Le logo apparaîtra dans le bandeau sous le Hero">
+                                <form action={run(addClient, 'Client ajouté ✓')} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                                        <Field label="Nom de la société"><Input name="name" placeholder="Microsoft, Google…" required /></Field>
+                                        <Field label="Secteur / Industrie"><Input name="industry" placeholder="Cloud & Logiciels" /></Field>
+                                    </div>
+                                    <Field label="Type de logo" hint="Pour les logos reconnus : microsoft, google, ey, revolut, stripe, airbus">
+                                        <Input name="logoType" placeholder="microsoft  |  google  |  ey  |  revolut  |  stripe  |  airbus  |  custom" />
+                                    </Field>
+                                    <div style={{ background: '#0d0d14', border: `1px solid ${BORDER}`, borderRadius: 12, padding: '14px 16px' }}>
+                                        <p style={{ fontSize: 12, color: '#555570', margin: 0, lineHeight: 1.6 }}>
+                                            💡 Valeurs reconnues : <span style={{ color: ACCENT, fontFamily: 'monospace' }}>microsoft</span>, <span style={{ color: ACCENT, fontFamily: 'monospace' }}>google</span>, <span style={{ color: ACCENT, fontFamily: 'monospace' }}>ey</span>, <span style={{ color: ACCENT, fontFamily: 'monospace' }}>revolut</span>, <span style={{ color: ACCENT, fontFamily: 'monospace' }}>stripe</span>, <span style={{ color: ACCENT, fontFamily: 'monospace' }}>airbus</span>.
+                                            Pour tout autre logo, utilisez <span style={{ color: '#aaa', fontFamily: 'monospace' }}>custom</span> (affichage textuel élégant).
+                                        </p>
+                                    </div>
+                                    <HR /><div style={{ display: 'flex', justifyContent: 'flex-end' }}><AddBtn label="Ajouter le client" pending={pend} /></div>
+                                </form>
+                            </Card>
+                        </>)}
+
                         {/* ─── TESTIMONIALS ──────────── */}
+
                         {tab === 'testi' && (<>
                             <Card title="Témoignages publiés" subtitle={`${testimonials?.length ?? 0} témoignage(s)`}>
                                 {!testimonials?.length
@@ -415,6 +459,9 @@ export default function AdminPage() {
                                         <Field label="Nom du client"><Input name="name" placeholder="Alexandre Dupont" required /></Field>
                                         <Field label="Poste & Société"><Input name="role" placeholder="CTO, FinTech Global" /></Field>
                                     </div>
+                                    <Field label="Logo de l'entreprise (optionnel)" hint="microsoft, google, ey, revolut, stripe, airbus">
+                                        <Input name="logoType" placeholder="google" />
+                                    </Field>
                                     <Field label="Témoignage"><Textarea name="text" placeholder="Ce que dit votre client…" style={{ minHeight: 110 }} required /></Field>
                                     <HR /><div style={{ display: 'flex', justifyContent: 'flex-end' }}><AddBtn label="Publier le témoignage" pending={pend} /></div>
                                 </form>

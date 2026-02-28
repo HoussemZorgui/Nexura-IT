@@ -4,7 +4,7 @@ import path from 'path';
 const dbPath = path.join(process.cwd(), 'db', 'data.json');
 
 export interface Blog {
-    id: string; title: string; excerpt: string; content: string; date: string;
+    id: string; title: string; excerpt: string; content: string; date: string; image?: string;
 }
 export interface Settings {
     telephone: string; address: string; email: string;
@@ -22,7 +22,10 @@ export interface TechItem {
     id: string; name: string;
 }
 export interface Testimonial {
-    id: string; name: string; role: string; avatar: string; text: string;
+    id: string; name: string; role: string; avatar: string; text: string; logoType?: string;
+}
+export interface Client {
+    id: string; name: string; logoType: string; industry: string;
 }
 export interface CTA {
     badge: string; title: string; highlight: string;
@@ -43,6 +46,7 @@ export interface DB {
     services: Service[];
     metrics: Metric[];
     techStack: TechItem[];
+    clients: Client[];
     testimonials: Testimonial[];
     cta: CTA;
     process: ProcessStep[];
@@ -53,7 +57,7 @@ export interface DB {
 const DEFAULTS: DB = {
     settings: { telephone: '', address: '', email: '' },
     hero: { pillText: '', titlePrefix: '', titleHighlight: '', description: '' },
-    services: [], metrics: [], techStack: [], testimonials: [],
+    services: [], metrics: [], techStack: [], clients: [], testimonials: [],
     cta: { badge: '', title: '', highlight: '', description: '', buttonPrimary: '', buttonSecondary: '' },
     process: [],
     reach: { pill: '', title: '', subtitle: '', description: '', stats: [] },

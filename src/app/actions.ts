@@ -86,6 +86,25 @@ export async function deleteTech(id: string) {
     saveDb(db); revalidate()
 }
 
+// ── Clients (Logos) ─────────────────────────────────────────
+export async function addClient(formData: FormData) {
+    const db = getDb()
+    const name = formData.get('name') as string
+    db.clients.push({
+        id: Date.now().toString(),
+        name,
+        logoType: formData.get('logoType') as string || 'custom',
+        industry: formData.get('industry') as string,
+    })
+    saveDb(db); revalidate()
+}
+
+export async function deleteClient(id: string) {
+    const db = getDb()
+    db.clients = db.clients.filter(c => c.id !== id)
+    saveDb(db); revalidate()
+}
+
 // ── Testimonials ─────────────────────────────────────────────
 export async function addTestimonial(formData: FormData) {
     const db = getDb()
@@ -96,6 +115,7 @@ export async function addTestimonial(formData: FormData) {
         role: formData.get('role') as string,
         avatar: name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2),
         text: formData.get('text') as string,
+        logoType: formData.get('logoType') as string || '',
     })
     saveDb(db); revalidate()
 }

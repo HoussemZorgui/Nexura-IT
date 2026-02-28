@@ -102,27 +102,68 @@
       "name": "Cyber Defense OS"
     }
   ],
+  "clients": [
+    {
+      "id": "c1",
+      "name": "Microsoft",
+      "logoType": "microsoft",
+      "industry": "Cloud & Logiciels"
+    },
+    {
+      "id": "c2",
+      "name": "Google",
+      "logoType": "google",
+      "industry": "Tech & IA"
+    },
+    {
+      "id": "c3",
+      "name": "EY",
+      "logoType": "ey",
+      "industry": "Conseil & Audit"
+    },
+    {
+      "id": "c4",
+      "name": "Revolut",
+      "logoType": "revolut",
+      "industry": "FinTech & Banking"
+    },
+    {
+      "id": "c5",
+      "name": "Stripe",
+      "logoType": "stripe",
+      "industry": "Paiement en ligne"
+    },
+    {
+      "id": "c6",
+      "name": "Airbus",
+      "logoType": "airbus",
+      "industry": "Aéronautique"
+    }
+  ],
   "testimonials": [
     {
       "id": "te1",
       "name": "Alexandre Dupont",
       "role": "CTO, FinTech Global",
       "avatar": "AD",
-      "text": "Nexura IT a transformé notre infrastructure en 6 semaines. Zéro downtime, performances décuplées. Un partenaire d'élite."
+      "text": "Nexura IT a transformé notre infrastructure en 6 semaines. Zéro downtime, performances décuplées. Un partenaire d'élite.",
+      "logoType": "revolut"
     },
     {
       "id": "te2",
       "name": "Sophie Martin",
       "role": "Directrice IT, MedGroup SA",
       "avatar": "SM",
-      "text": "L'audit cybersécurité réalisé par Nexura a révélé des failles critiques et surtout les solutions pour les corriger. Irréprochable."
+      "text": "L'audit cybersécurité réalisé par Nexura a révélé des failles critiques et surtout les solutions pour les corriger. Irréprochable.",
+      "logoType": "ey"
     },
     {
       "id": "te3",
       "name": "Karim Benaissa",
       "role": "CEO, StartupLab",
       "avatar": "KB",
-      "text": "Notre MVP a été livré en 3 semaines avec une qualité de code digne des GAFAM. L'équipe Nexura est exceptionnelle."
+      "text": "Notre MVP a été livré en 3 semaines avec une qualité de code digne des GAFAM. L'équipe Nexura est exceptionnelle.",
+      "logoType": "google"
     }
   ],
   "cta": {
@@ -181,10 +222,27 @@
   "blogs": [
     {
       "id": "1",
-      "title": "Welcome to the Future of IT",
-      "excerpt": "Discover how Nexura IT is transforming businesses with scalable solutions and cutting-edge technology.",
-      "content": "Nexura IT is a premium IT services provider helping enterprises scale their infrastructure. Our core specialities include modern web apps, cloud migrations, and robust security auditing.",
-      "date": "2026-02-28"
+      "title": "L'Architecture Cloud Serverless : Pourquoi les Startups l'Adorent",
+      "excerpt": "Découvrez comment l'architecture Serverless permet aux startups d'économiser jusqu'à 60% sur leurs coûts d'infrastructure tout en gagnant en flexibilité.",
+      "content": "L'agilité est de mise pour toute startup en phase de croissance. L'architecture Cloud Serverless (AWS Lambda, Google Cloud Functions) élimine le besoin de gérer des serveurs physiques ou virtuels. Payez uniquement pour ce que vous consommez et laissez votre application scaler automatiquement en fonction du trafic.",
+      "date": "2026-03-01",
+      "image": "/images/blogs/cloud.png"
+    },
+    {
+      "id": "2",
+      "title": "Cybersécurité pour Startups : Les 5 Failles les Plus Courantes",
+      "excerpt": "La sécurité n'est pas un luxe réservé aux grands groupes. Apprenez à sécuriser votre MVP dès le premier jour contre les menaces modernes.",
+      "content": "De nombreuses startups négligent la cybersécurité dans la course au MVP. Résultat : fuites de données et perte de confiance des investisseurs. Découvrez comment implémenter une authentification forte, chiffrer les données sensibles et auditer votre code pour prévenir les attaques les plus courantes.",
+      "date": "2026-02-28",
+      "image": "/images/blogs/cyber.png"
+    },
+    {
+      "id": "3",
+      "title": "Intégrer l'IA dans votre Produit (B2B SaaS) : Stratégies et Pièges",
+      "excerpt": "L'Intelligence Artificielle est un levier de croissance massif. Voici comment l'implémenter efficacement dans votre plateforme SaaS B2B.",
+      "content": "L'intégration de l'IA (LLMs, Machine Learning) peut transformer un produit SaaS basique en une solution incontournable. Nous explorons les cas d'usage réels : de l'automatisation du support client à l'analyse prédictive, tout en évitant les surcoûts d'API et les hallucinations des modèles.",
+      "date": "2026-02-25",
+      "image": "/images/blogs/ai.png"
     }
   ]
 }
