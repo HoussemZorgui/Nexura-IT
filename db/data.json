@@ -4,6 +4,99 @@
     "address": "123 Avenue des Champs-Élysées, 75008 Paris",
     "email": "contact@nexura.it"
   },
+  "hero": {
+    "pillText": "IT Services & Solutions",
+    "titlePrefix": "Shape the",
+    "titleHighlight": "Future.",
+    "description": "Propulsez votre entreprise vers l'avant avec des infrastructures Cloud ultra-performantes, des audits de cybersécurité implacables et du développement sur-mesure premium."
+  },
+  "services": [
+    {
+      "id": "s1",
+      "icon": "☁️",
+      "title": "Cloud Architecture",
+      "description": "Migration, scalabilité, et gestion d'infrastructure Cloud ultra-performante et sécurisée."
+    },
+    {
+      "id": "s2",
+      "icon": "⚡️",
+      "title": "Développement Sur-Mesure",
+      "description": "Création d'applications Web et Mobiles premium avec les dernières technologies (React, Next.js)."
+    },
+    {
+      "id": "s3",
+      "icon": "🛡️",
+      "title": "Cybersécurité & Audit",
+      "description": "Protection avancée de vos données et audits complets pour assurer la résilience de vos systèmes."
+    }
+  ],
+  "metrics": [
+    {
+      "title": "99.9%",
+      "desc": "Fiabilité Absolue",
+      "glow": "shadow-[0_0_30px_rgba(0,210,255,0.15)]"
+    },
+    {
+      "title": "24/7",
+      "desc": "Support Premium",
+      "glow": ""
+    },
+    {
+      "title": "+150",
+      "desc": "Projets Déployés",
+      "glow": ""
+    },
+    {
+      "title": "Zero",
+      "desc": "Failles de Sécurité",
+      "glow": "shadow-[0_0_30px_rgba(99,102,241,0.15)]"
+    }
+  ],
+  "process": [
+    {
+      "id": "p1",
+      "step": "01",
+      "title": "Audit & Stratégie",
+      "description": "Analyse profonde de votre infrastructure existante. Nous identifions les frictions et concevons une architecture cible évolutive et sécurisée.",
+      "gradient": "from-cyan-400 to-blue-600",
+      "shadow": "shadow-cyan-500/20",
+      "hoverBorder": "hover:border-cyan-500/30"
+    },
+    {
+      "id": "p2",
+      "step": "02",
+      "title": "Engineering Core",
+      "description": "Déploiement furtif par nos experts (DevOps, SecOps, Dev). Code clean, tests automatisés algorithmiques et intégration continue.",
+      "gradient": "from-blue-500 to-indigo-600",
+      "shadow": "shadow-blue-500/20",
+      "hoverBorder": "hover:border-blue-500/30"
+    },
+    {
+      "id": "p3",
+      "step": "03",
+      "title": "Scale & Monitoring",
+      "description": "Lancement sur serveurs haute-disponibilité. Vos systèmes sont monitorés 24/7 par nos IAs pour anticiper les baisses de charge.",
+      "gradient": "from-indigo-500 to-purple-600",
+      "shadow": "shadow-indigo-500/20",
+      "hoverBorder": "hover:border-indigo-500/30"
+    }
+  ],
+  "reach": {
+    "pill": "Présence Internationale",
+    "title": "Des infrastructures sans frontières,",
+    "subtitle": "partout où vous allez.",
+    "description": "Nous opérons sur des réseaux CDN globaux et des data centers multi-régions. Vos services répondent en moins de 50ms de Tokyo à San Francisco en passant par Paris.",
+    "stats": [
+      {
+        "label": "Datacenters",
+        "value": "9+"
+      },
+      {
+        "label": "Latence Moyenne",
+        "value": "<50ms"
+      }
+    ]
+  },
   "blogs": [
     {
       "id": "1",

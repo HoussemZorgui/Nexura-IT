@@ -17,8 +17,51 @@ export interface Settings {
     email: string;
 }
 
+export interface Hero {
+    pillText: string;
+    titlePrefix: string;
+    titleHighlight: string;
+    description: string;
+}
+
+export interface Service {
+    id: string;
+    icon: string;
+    title: string;
+    description: string;
+}
+
+export interface Metric {
+    title: string;
+    desc: string;
+    glow: string;
+}
+
+export interface ProcessStep {
+    id: string;
+    step: string;
+    title: string;
+    description: string;
+    gradient: string;
+    shadow: string;
+    hoverBorder: string;
+}
+
+export interface Reach {
+    pill: string;
+    title: string;
+    subtitle: string;
+    description: string;
+    stats: { label: string; value: string }[];
+}
+
 export interface DB {
     settings: Settings;
+    hero: Hero;
+    services: Service[];
+    metrics: Metric[];
+    process: ProcessStep[];
+    reach: Reach;
     blogs: Blog[];
 }
 
@@ -27,8 +70,14 @@ export function getDb(): DB {
         const data = fs.readFileSync(dbPath, 'utf-8');
         return JSON.parse(data);
     } catch (error) {
+        // Provide enough defaults
         return {
             settings: { telephone: '', address: '', email: '' },
+            hero: { pillText: '', titlePrefix: '', titleHighlight: '', description: '' },
+            services: [],
+            metrics: [],
+            process: [],
+            reach: { pill: '', title: '', subtitle: '', description: '', stats: [] },
             blogs: []
         };
     }

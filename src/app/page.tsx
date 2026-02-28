@@ -2,7 +2,7 @@ import { getDb } from '@/lib/db';
 import UnicornWrapper from '@/components/UnicornWrapper';
 
 export default function Home() {
-  const { settings, blogs } = getDb();
+  const { settings, blogs, hero, services, metrics, process, reach } = getDb();
 
   return (
     <>
@@ -28,17 +28,17 @@ export default function Home() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500 shadow-[0_0_10px_#00d2ff]"></span>
                 </span>
-                IT Services & Solutions
+                {hero.pillText}
               </div>
 
               {/* Massive Typography floating on the beam */}
               <h1 className="text-6xl md:text-8xl lg:text-[7.5rem] font-black mb-8 tracking-tighter leading-none text-white drop-shadow-2xl">
-                Shape the <span className="text-transparent bg-clip-text bg-gradient-to-br from-cyan-300 via-blue-500 to-indigo-600">Future.</span>
+                {hero.titlePrefix} <span className="text-transparent bg-clip-text bg-gradient-to-br from-cyan-300 via-blue-500 to-indigo-600">{hero.titleHighlight}</span>
               </h1>
 
               {/* Refined Description */}
               <p className="text-xl md:text-2xl text-gray-300/90 max-w-3xl mx-auto mb-14 font-light tracking-wide leading-relaxed drop-shadow-lg mix-blend-screen">
-                Propulsez votre entreprise vers l'avant avec des infrastructures Cloud ultra-performantes, des audits de cybersécurité implacables et du développement sur-mesure premium.
+                {hero.description}
               </p>
 
               {/* Minimalist Premium Buttons */}
@@ -70,30 +70,15 @@ export default function Home() {
             <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent text-center mb-16">Nos Services Informatiques</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
 
-              <div className="glass-panel hover:-translate-y-2 transition-transform duration-300">
-                <div style={{ fontSize: '3rem', marginBottom: '1rem' }} className="text-cyan-400">☁️</div>
-                <h3 style={{ marginBottom: '1rem', fontSize: '1.5rem' }}>Cloud Architecture</h3>
-                <p style={{ color: 'var(--text-secondary)' }}>
-                  Migration, scalabilité, et gestion d'infrastructure Cloud ultra-performante et sécurisée.
-                </p>
-              </div>
-
-              <div className="glass-panel hover:-translate-y-2 transition-transform duration-300 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 blur-3xl rounded-full"></div>
-                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚡️</div>
-                <h3 style={{ marginBottom: '1rem', fontSize: '1.5rem' }}>Développement Sur-Mesure</h3>
-                <p style={{ color: 'var(--text-secondary)' }}>
-                  Création d'applications Web et Mobiles premium avec les dernières technologies (React, Next.js).
-                </p>
-              </div>
-
-              <div className="glass-panel hover:-translate-y-2 transition-transform duration-300">
-                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🛡️</div>
-                <h3 style={{ marginBottom: '1rem', fontSize: '1.5rem' }}>Cybersécurité & Audit</h3>
-                <p style={{ color: 'var(--text-secondary)' }}>
-                  Protection avancée de vos données et audits complets pour assurer la résilience de vos systèmes.
-                </p>
-              </div>
+              {services.map(s => (
+                <div key={s.id} className="glass-panel hover:-translate-y-2 transition-transform duration-300">
+                  <div style={{ fontSize: '3rem', marginBottom: '1rem' }} className="text-cyan-400">{s.icon}</div>
+                  <h3 style={{ marginBottom: '1rem', fontSize: '1.5rem' }}>{s.title}</h3>
+                  <p style={{ color: 'var(--text-secondary)' }}>
+                    {s.description}
+                  </p>
+                </div>
+              ))}
 
             </div>
           </div>
@@ -103,12 +88,7 @@ export default function Home() {
         <section className="container" style={{ padding: '6rem 5%' }}>
           <div className="animate-fade-in delay-2">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { title: '99.9%', desc: 'Fiabilité Absolue', glow: 'shadow-[0_0_30px_rgba(0,210,255,0.15)]' },
-                { title: '24/7', desc: 'Support Premium', glow: '' },
-                { title: '+150', desc: 'Projets Déployés', glow: '' },
-                { title: 'Zero', desc: 'Failles de Sécurité', glow: 'shadow-[0_0_30px_rgba(99,102,241,0.15)]' }
-              ].map((metric, i) => (
+              {metrics.map((metric, i) => (
                 <div key={i} className={`relative bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl p-8 flex flex-col items-center justify-center text-center hover:-translate-y-2 transition-all duration-500 hover:border-cyan-500/30 ${metric.glow}`}>
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-3xl pointer-events-none"></div>
                   <h4 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-2">
@@ -153,32 +133,15 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative z-10">
-            {/* Step 1 */}
-            <div className="group bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-[2.5rem] hover:bg-white/10 transition-all duration-500 hover:border-cyan-500/30">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-2xl font-black text-white shadow-lg shadow-cyan-500/20 mb-8 group-hover:scale-110 transition-transform">01</div>
-              <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">Audit & Stratégie</h3>
-              <p className="text-gray-400 font-light leading-relaxed">
-                Analyse profonde de votre infrastructure existante. Nous identifions les frictions et concevons une architecture cible évolutive et sécurisée.
-              </p>
-            </div>
-
-            {/* Step 2 */}
-            <div className="group bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-[2.5rem] hover:bg-white/10 transition-all duration-500 hover:border-blue-500/30">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-2xl font-black text-white shadow-lg shadow-blue-500/20 mb-8 group-hover:scale-110 transition-transform">02</div>
-              <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">Engineering Core</h3>
-              <p className="text-gray-400 font-light leading-relaxed">
-                Déploiement furtif par nos experts (DevOps, SecOps, Dev). Code clean, tests automatisés algorithmiques et intégration continue.
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="group bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-[2.5rem] hover:bg-white/10 transition-all duration-500 hover:border-indigo-500/30">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl font-black text-white shadow-lg shadow-indigo-500/20 mb-8 group-hover:scale-110 transition-transform">03</div>
-              <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">Scale & Monitoring</h3>
-              <p className="text-gray-400 font-light leading-relaxed">
-                Lancement sur serveurs haute-disponibilité. Vos systèmes sont monitorés 24/7 par nos IAs pour anticiper les baisses de charge.
-              </p>
-            </div>
+            {process.map(step => (
+              <div key={step.id} className={`group bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-[2.5rem] hover:bg-white/10 transition-all duration-500 ${step.hoverBorder}`}>
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${step.gradient} flex items-center justify-center text-2xl font-black text-white shadow-lg ${step.shadow} mb-8 group-hover:scale-110 transition-transform`}>{step.step}</div>
+                <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">{step.title}</h3>
+                <p className="text-gray-400 font-light leading-relaxed">
+                  {step.description}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -187,23 +150,21 @@ export default function Home() {
           <div className="container relative z-10 flex flex-col lg:flex-row items-center justify-between gap-16 px-4">
 
             <div className="w-full lg:w-1/2">
-              <p className="text-indigo-400 text-sm font-bold tracking-widest uppercase mb-4">Présence Internationale</p>
+              <p className="text-indigo-400 text-sm font-bold tracking-widest uppercase mb-4">{reach.pill}</p>
               <h2 className="text-4xl md:text-5xl font-light text-white mb-8 leading-tight">
-                Des infrastructures sans frontières, <br />
-                <span className="font-bold">partout où vous allez.</span>
+                {reach.title} <br />
+                <span className="font-bold">{reach.subtitle}</span>
               </h2>
               <p className="text-xl text-gray-400 font-light mb-10 leading-relaxed">
-                Nous opérons sur des réseaux CDN globaux et des data centers multi-régions. Vos services répondent en moins de 50ms de Tokyo à San Francisco en passant par Paris.
+                {reach.description}
               </p>
               <div className="flex gap-12">
-                <div>
-                  <span className="block text-4xl font-bold text-white mb-2">9+</span>
-                  <span className="text-gray-500 uppercase tracking-widest text-xs font-semibold">Datacenters</span>
-                </div>
-                <div>
-                  <span className="block text-4xl font-bold text-white mb-2">&lt;50ms</span>
-                  <span className="text-gray-500 uppercase tracking-widest text-xs font-semibold">Latence Moyenne</span>
-                </div>
+                {reach.stats.map((s, i) => (
+                  <div key={i}>
+                    <span className="block text-4xl font-bold text-white mb-2">{s.value}</span>
+                    <span className="text-gray-500 uppercase tracking-widest text-xs font-semibold">{s.label}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
