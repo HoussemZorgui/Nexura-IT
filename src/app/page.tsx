@@ -140,6 +140,91 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Our Process / Méthodologie */}
+        <section className="container relative" style={{ padding: '8rem 5%' }}>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-blue-600/5 blur-[120px] rounded-[100%] pointer-events-none"></div>
+
+          <div className="relative z-10 text-center mb-20 animate-fade-in delay-1">
+            <p className="text-cyan-400 text-sm font-bold tracking-widest uppercase mb-4">Méthodologie d'Excellence</p>
+            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent">
+              Comment nous <span className="text-white">transformons</span> votre vision.
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+            {/* Step 1 */}
+            <div className="group relative bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-3xl hover:bg-white/10 transition-colors duration-500">
+              <div className="absolute -top-6 -left-6 w-16 h-16 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-2xl font-black text-white shadow-xl shadow-cyan-500/30 group-hover:scale-110 transition-transform">01</div>
+              <h3 className="text-2xl font-semibold text-white mt-4 mb-4">Audit & Stratégie</h3>
+              <p className="text-gray-400 font-light leading-relaxed">
+                Analyse profonde de votre infrastructure existante. Nous identifions les frictions et concevons une architecture cible évolutive et sécurisée.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="group relative bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-3xl hover:bg-white/10 transition-colors duration-500 mt-0 md:mt-12">
+              <div className="absolute -top-6 -left-6 w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-2xl font-black text-white shadow-xl shadow-blue-500/30 group-hover:scale-110 transition-transform">02</div>
+              <h3 className="text-2xl font-semibold text-white mt-4 mb-4">Engineering Core</h3>
+              <p className="text-gray-400 font-light leading-relaxed">
+                Déploiement furtif par nos experts (DevOps, SecOps, Dev). Code clean, tests automatisés algorithmiques et intégration continue.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="group relative bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-3xl hover:bg-white/10 transition-colors duration-500 mt-0 md:mt-24">
+              <div className="absolute -top-6 -left-6 w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl font-black text-white shadow-xl shadow-indigo-500/30 group-hover:scale-110 transition-transform">03</div>
+              <h3 className="text-2xl font-semibold text-white mt-4 mb-4">Scale & Monitoring</h3>
+              <p className="text-gray-400 font-light leading-relaxed">
+                Lancement sur serveurs haute-disponibilité. Vos systèmes sont monitorés 24/7 par nos IAs pour anticiper les baisses de charge.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Global Reach / Map */}
+        <section className="relative overflow-hidden border-y border-white/5 bg-black/20 backdrop-blur-sm" style={{ padding: '8rem 0' }}>
+          <div className="container relative z-10 flex flex-col lg:flex-row items-center justify-between gap-16 px-4">
+
+            <div className="w-full lg:w-1/2">
+              <p className="text-indigo-400 text-sm font-bold tracking-widest uppercase mb-4">Présence Internationale</p>
+              <h2 className="text-4xl md:text-5xl font-light text-white mb-8 leading-tight">
+                Des infrastructures sans frontières, <br />
+                <span className="font-bold">partout où vous allez.</span>
+              </h2>
+              <p className="text-xl text-gray-400 font-light mb-10 leading-relaxed">
+                Nous opérons sur des réseaux CDN globaux et des data centers multi-régions. Vos services répondent en moins de 50ms de Tokyo à San Francisco en passant par Paris.
+              </p>
+              <div className="flex gap-12">
+                <div>
+                  <span className="block text-4xl font-bold text-white mb-2">9+</span>
+                  <span className="text-gray-500 uppercase tracking-widest text-xs font-semibold">Datacenters</span>
+                </div>
+                <div>
+                  <span className="block text-4xl font-bold text-white mb-2">&lt;50ms</span>
+                  <span className="text-gray-500 uppercase tracking-widest text-xs font-semibold">Latence Moyenne</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="w-full lg:w-1/2 relative h-[400px]">
+              {/* Abstract representation of a glowing network globe/dots */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-[80%] h-[80%] border border-cyan-500/20 rounded-full animate-[spin_60s_linear_infinite] relative">
+                  <div className="absolute top-0 left-1/2 w-4 h-4 bg-cyan-400 rounded-full shadow-[0_0_20px_#00d2ff] -translate-x-1/2 -translate-y-1/2"></div>
+                  <div className="absolute bottom-1/4 left-0 w-3 h-3 bg-blue-500 rounded-full shadow-[0_0_15px_blue] -translate-x-1/2 translate-y-1/2"></div>
+                  <div className="absolute bottom-1/4 right-0 w-5 h-5 bg-indigo-500 rounded-full shadow-[0_0_20px_#4f46e5] translate-x-1/2 translate-y-1/2"></div>
+                </div>
+                <div className="absolute w-[60%] h-[60%] border border-blue-500/20 rounded-full animate-[spin_40s_linear_infinite_reverse] relative">
+                  <div className="absolute top-1/4 right-0 w-3 h-3 bg-purple-400 rounded-full shadow-[0_0_15px_purple] translate-x-1/2 -translate-y-1/2"></div>
+                  <div className="absolute bottom-0 left-1/2 w-4 h-4 bg-cyan-300 rounded-full shadow-[0_0_15px_cyan] -translate-x-1/2 translate-y-1/2"></div>
+                </div>
+                {/* Pulsing Core */}
+                <div className="absolute w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full animate-pulse shadow-[0_0_50px_rgba(0,210,255,0.6)]"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Blogs / Actualités */}
         <section id="blogs" className="container" style={{ padding: '8rem 5%' }}>
           <div className="animate-fade-in delay-2">
