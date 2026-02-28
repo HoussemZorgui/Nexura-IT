@@ -98,8 +98,50 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Why Choose Us / Key Metrics */}
+        <section className="container" style={{ padding: '6rem 5%' }}>
+          <div className="animate-fade-in delay-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { title: '99.9%', desc: 'Fiabilité Absolue', glow: 'shadow-[0_0_30px_rgba(0,210,255,0.15)]' },
+                { title: '24/7', desc: 'Support Premium', glow: '' },
+                { title: '+150', desc: 'Projets Déployés', glow: '' },
+                { title: 'Zero', desc: 'Failles de Sécurité', glow: 'shadow-[0_0_30px_rgba(99,102,241,0.15)]' }
+              ].map((metric, i) => (
+                <div key={i} className={`relative bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl p-8 flex flex-col items-center justify-center text-center hover:-translate-y-2 transition-all duration-500 hover:border-cyan-500/30 ${metric.glow}`}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-3xl pointer-events-none"></div>
+                  <h4 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-2">
+                    {metric.title}
+                  </h4>
+                  <p className="text-gray-400 text-sm tracking-widest uppercase mt-4 font-medium">
+                    {metric.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Tech Stack / Technologies */}
+        <section className="relative overflow-hidden" style={{ padding: '8rem 0' }}>
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/10 via-transparent to-blue-900/10 border-y border-white/5"></div>
+          <div className="container relative z-10 px-4 text-center">
+            <p className="text-cyan-400 text-sm font-bold tracking-widest uppercase mb-4">Notre Arsenal Technologique</p>
+            <h2 className="text-3xl md:text-5xl font-light text-white mb-16">
+              Propulsé par les <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">meilleures architectures</span> au monde.
+            </h2>
+            <div className="flex flex-wrap justify-center gap-4 max-w-5xl mx-auto">
+              {['React', 'Next.js 15', 'Node.js', 'Python', 'Go', 'AWS Architecture', 'Microsoft Azure', 'Docker', 'Kubernetes', 'Cyber Defense OS', 'TypeScript', 'GraphQL'].map((tech, i) => (
+                <div key={i} className="px-6 py-3 rounded-full bg-white/5 border border-white/10 text-gray-300 backdrop-blur-md hover:bg-cyan-500/20 hover:border-cyan-400/50 hover:text-white transition-all duration-300 hover:scale-105 shadow-xl font-medium tracking-wide">
+                  {tech}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Blogs / Actualités */}
-        <section id="blogs" className="container" style={{ padding: '4rem 5% 8rem' }}>
+        <section id="blogs" className="container" style={{ padding: '8rem 5%' }}>
           <div className="animate-fade-in delay-2">
             <div className="flex justify-between items-end mb-12">
               <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent">Actualités & Blog</h2>
