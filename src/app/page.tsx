@@ -1,5 +1,6 @@
 import { getDb } from '@/lib/db';
 import UnicornWrapper from '@/components/UnicornWrapper';
+import Image from 'next/image';
 
 export default function Home() {
   const { settings, blogs, hero, services, metrics, process, reach } = getDb();
@@ -7,6 +8,28 @@ export default function Home() {
   return (
     <>
       <main className="relative">
+
+        {/* Transparent Header overlaying the Hero layer */}
+        <nav className="absolute w-full top-0 left-0 z-50 py-6">
+          <div className="container mx-auto px-6 flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <Image
+                src="/logo.png"
+                alt="Nexura IT Logo"
+                width={120}
+                height={120}
+                className="hover:scale-105 transition-transform drop-shadow-[0_0_15px_rgba(0,210,255,0.4)]"
+                priority
+              />
+            </div>
+
+            <div className="flex gap-8 items-center">
+              <a href="/" className="text-sm font-medium text-gray-200 hover:text-cyan-400 transition-colors" style={{ textShadow: "0 2px 4px rgba(0,0,0,0.8)" }}>Accueil</a>
+              <a href="#services" className="text-sm font-medium text-gray-200 hover:text-cyan-400 transition-colors" style={{ textShadow: "0 2px 4px rgba(0,0,0,0.8)" }}>Services</a>
+              <a href="#blogs" className="text-sm font-medium text-gray-200 hover:text-cyan-400 transition-colors" style={{ textShadow: "0 2px 4px rgba(0,0,0,0.8)" }}>Blog</a>
+            </div>
+          </div>
+        </nav>
 
         {/* Unicorn Studio Fixed Global Background */}
         <div className="fixed inset-0 w-full h-full -z-10 bg-black">
@@ -280,7 +303,6 @@ export default function Home() {
                   <li><a href="/" className="text-gray-400 hover:text-white transition-colors">Accueil</a></li>
                   <li><a href="#services" className="text-gray-400 hover:text-white transition-colors">Notre Expertise</a></li>
                   <li><a href="#blogs" className="text-gray-400 hover:text-white transition-colors">Blog & Insights</a></li>
-                  <li><a href="/admin" className="text-gray-400 hover:text-white transition-colors">Portail Client (Admin)</a></li>
                 </ul>
               </div>
 
